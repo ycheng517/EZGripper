@@ -1,4 +1,14 @@
-arm_controller:
+left_controller:
   type: "effort_controllers/JointEffortController"
   joint: only_ezgripper_knuckle_1
-  pid: {p: 10.0, i: 0.01, d: 0.01}
+  pid: {p: 10.0, i: 0.01, d: 1.0}
+
+right_controller:
+  type: "effort_controllers/JointEffortController"
+  joint: only_ezgripper_knuckle_2
+  pid: {p: 10.0, i: 0.01, d: 1.0}
+  
+spring_calculation_controller:
+  type: "effort_controllers/JointEffortController"
+  joint: spring_force_calculation_joint
+  pid: {p: 10.0, i: 0.01, d: 1.0}

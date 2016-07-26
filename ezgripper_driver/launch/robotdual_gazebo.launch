@@ -13,6 +13,8 @@
         args="-param sake_robot_model -sdf -model sake_robot" />  
 
   <rosparam file="$(find ezgripper_driver)/config/controllers_dual.yaml" command="load"/>
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" args="arm_controller"/>
+  <node name="left_controller_spawner" pkg="controller_manager" type="spawner" args="left_controller"/>
+  <node name="right_controller_spawner" pkg="controller_manager" type="spawner" args="right_controller"/>
+  <node name="spring_controller_spawner" pkg="controller_manager" type="spawner" args="spring_calculation_controller"/>
 
 </launch>

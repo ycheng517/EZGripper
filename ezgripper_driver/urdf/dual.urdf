@@ -9,29 +9,13 @@
   <!-- transmissions for Gazebo -->
   <gazebo>
     <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
-   </plugin>
+    </plugin>
   </gazebo>
 
   <gazebo>
     <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
-      <jointName>only_ezgripper_knuckle_1,only_ezgripper_knuckle_2</jointName>
+      <jointName>only_ezgripper_knuckle_1,only_ezgripper_knuckle_2,only_ezgripper_tip_joint_1,only_ezgripper_tip_joint_2</jointName>
     </plugin>
-  </gazebo>
-
-  <gazebo reference="only_ezgripper_knuckle_1">
-    <stopCfm>0.8</stopCfm>
-    <stopErp>100</stopErp>
-    <provideFeedback>true</provideFeedback>
-    <implicitSpringDamper>true</implicitSpringDamper>
-    <fudgeFactor>0.2</fudgeFactor>
-  </gazebo>
-
-  <gazebo reference="only_ezgripper_knuckle_2">
-    <stopCfm>0.8</stopCfm>
-    <stopErp>100</stopErp>
-    <provideFeedback>true</provideFeedback>
-    <implicitSpringDamper>true</implicitSpringDamper>
-    <fudgeFactor>0.2</fudgeFactor>
   </gazebo>
 
   <!-- Add the gripper -->
@@ -68,17 +52,17 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl"/>
+        <mesh filename="package://ezgripper_driver/meshes/visual/SAKE_Finger_Link1.stl"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://ezgripper_driver/meshes/collision/SAKE_Finger.stl"/>
+        <mesh filename="package://ezgripper_driver/meshes/collision/SAKE_Finger_Link1.stl"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.064 0 0.00132"/>
+      <origin rpy="0 0 0" xyz="-0.03121 0 -0.00256"/>
       <mass value=".025"/>
       <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
     </inertial>
@@ -88,17 +72,17 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://ezgripper_driver/meshes/visual/SAKE_Finger.stl"/>
+        <mesh filename="package://ezgripper_driver/meshes/visual/SAKE_Finger_Link1.stl"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://ezgripper_driver/meshes/collision/SAKE_Finger.stl"/>
+        <mesh filename="package://ezgripper_driver/meshes/collision/SAKE_Finger_Link1.stl"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.064 0 0.00132"/>
+      <origin rpy="0 0 0" xyz="-0.03121 0 -0.00256"/>
       <mass value=".025"/>
       <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
     </inertial>
@@ -118,7 +102,85 @@
     <origin rpy="-1.5708 0 3.14159" xyz="0.1056 -0.03 0"/>
     <axis xyz="0 1 0"/>
     <limit effort="1" lower="-.27" upper="1.57075" velocity="3.67"/>
-    <mimic joint="only_ezgripper_knuckle_1"/>
+  </joint>
+
+  <link name="only_ezgripper_finger_tip_1">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ezgripper_driver/meshes/visual/SAKE_Finger_Link2.stl"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ezgripper_driver/meshes/collision/SAKE_Finger_Link2.stl"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.03108 0 -0.00325"/>
+      <mass value=".025"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <link name="only_ezgripper_finger_tip_2">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ezgripper_driver/meshes/visual/SAKE_Finger_Link2.stl"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ezgripper_driver/meshes/collision/SAKE_Finger_Link2.stl"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.03108 0 -0.00325"/>
+      <mass value=".025"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <joint name="only_ezgripper_tip_joint_1" type="revolute">
+    <parent link="only_ezgripper_finger_1"/>
+    <child link="only_ezgripper_finger_tip_1"/>
+    <origin rpy="0 0.31 0" xyz="-0.0655 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1" lower="-1.57" upper="0.31" velocity="3.67"/>
+  </joint>
+
+  <joint name="only_ezgripper_tip_joint_2" type="revolute">
+    <parent link="only_ezgripper_finger_2"/>
+    <child link="only_ezgripper_finger_tip_2"/>
+    <origin rpy="0 0.31 0" xyz="-0.0655 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1" lower="-1.57" upper="0.31" velocity="3.67"/>
+  </joint>
+
+  <link name="spring_force_calculation_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01">
+        </box>
+      </geometry>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.005 0.005 0.005"/>
+      <mass value=".025"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <joint name="spring_force_calculation_joint" type="revolute">
+    <parent link="only_ezgripper_palm_link"/>
+    <child link="spring_force_calculation_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0.2"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1" lower="-.27" upper="1.57075" velocity="3.67"/>
   </joint>
 
   <transmission name="only_ezgripper_trans_1">
@@ -137,11 +199,43 @@
     <joint name="only_ezgripper_knuckle_2">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="only_ezgripper_motor2">
+    <actuator name="only_ezgripper_motor1">
       <mechanicalReduction>1</mechanicalReduction>
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </actuator>
   </transmission>
 
+  <transmission name="only_ezgripper_trans_3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="only_ezgripper_tip_joint_1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor1">
+      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="only_ezgripper_tip_joint_2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor1">
+      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="spring_force_calculation_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor1">
+      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 </robot>
 
