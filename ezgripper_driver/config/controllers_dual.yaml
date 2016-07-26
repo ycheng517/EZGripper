@@ -1,5 +1,3 @@
 arm_controller:
-  type: "position_controllers/JointTrajectoryController"
-  joints:
-    - knuckle_1
-    - knuckle_2
+  type: "effort_controllers/JointPositionController"
+  joint: only_ezgripper_knuckle_1

@@ -72,7 +72,8 @@
       </collision>
       <inertial>
         <mass value=".025"/>
-        <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy=".01" iyz="0.0" izz="0.01"/>
+        <pose>0.5 0.0 0 0.0 0.0 0.0</pose>
+        <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
       </inertial>
     </link>
 </macro>
@@ -87,11 +88,24 @@
       <parent link="${prefix}_ezgripper_palm_link"/>
       <child link="${prefix}_ezgripper_finger_${postfix}"/>
       <origin xyz="0.1056 ${reflectY*0.03} ${reflectZ*0.03}" rpy="${1.5708 * reflectR} 0 3.14159"/>
-      <axis xyz="0 1 0"/>
+      <axis xyz="0 1 0">
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>1</spring_stiffness>
+        </dynamics>
+      </axis>
       <limit lower="-.27" upper="1.57075" effort="1" velocity="3.67"/>
       <xacro:if value="${mimic_test}">
            <mimic joint="${prefix}_ezgripper_knuckle_1"/>
       </xacro:if>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>9.0</cfm>
+            <erp>1.0</erp>
+          </limit>
+        </ode>
+      </physics>
     </joint>
 </macro>
 

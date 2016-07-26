@@ -1,19 +1,17 @@
 <launch>
   
-	<param name="robot_description" command="$(find xacro)/xacro '$(find ezgripper_driver)/urdf/ezgripper_dual_standalone.urdf.xacro'" /> 
+	<param name="robot_description" command="cat $(find ezgripper_driver)/urdf/dual.urdf" /> 
+	<param name="sake_robot_model" command="cat $(find ezgripper_driver)/urdf/dual.sdf" /> 
 
-  <rosparam file="$(find ezgripper_driver)/config/controllers_dual.yaml" command="load"/> 
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" args="arm_controller"/>
+
 
   <!-- Start Gazebo with an empty world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch"> 
   </include>
-
  
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
-        args="-param robot_description -urdf -model sake_robot" />
+  <node name="spawn_sdf" pkg="gazebo_ros" type="spawn_model"
+        args="-param sake_robot_model -sdf -model sake_robot" />  
 
-	
-  
-
+  <rosparam file="$(find ezgripper_driver)/config/controllers_dual.yaml" command="load"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" args="arm_controller"/>
 </launch>
