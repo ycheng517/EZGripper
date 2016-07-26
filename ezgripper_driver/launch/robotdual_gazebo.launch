@@ -14,4 +14,5 @@
 
   <rosparam file="$(find ezgripper_driver)/config/controllers_dual.yaml" command="load"/>
   <node name="controller_spawner" pkg="controller_manager" type="spawner" args="arm_controller"/>
+
 </launch>

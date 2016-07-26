@@ -86,8 +86,8 @@
       <origin xyz="0.1056 ${reflectY*0.03} 0" rpy="${1.5708 * reflectR} 0 3.14159"/>
       <axis xyz="0 1 0"/>
       <limit lower="-.27" upper="1.57075" effort="1" velocity="3.67"/>
-      <xacro:if value="${mimic_test}">
-           <mimic joint="ezgripper_knuckle_1"/>
+      <xacro:if value="${	_test}">
+           <mimic joint="${prefix}_ezgripper_knuckle_1"/>
       </xacro:if>
     </joint>
 </macro>
