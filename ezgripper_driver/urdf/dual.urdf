@@ -27,11 +27,83 @@
   <!-- Add the gripper -->
   <!-- links -->
   <link name="world"/>
-  <joint name="fixed" type="fixed">
-    <origin rpy="0 0 0" xyz="0.049 0.0 0.2"/>
+  <link name="ezgripper_xy">
+   <visual>
+       <geometry>
+           <cylinder length="0.42" radius="0.02"/>
+        </geometry>
+    </visual>
+  </link>
+  <link name="ezgripper_yz">
+   <visual>
+       <geometry>
+           <cylinder length="0.42" radius="0.02"/>
+        </geometry>
+    </visual>
+  </link>
+  <link name="ezgripper_z_rx">
+   <visual>
+       <geometry>
+           <cylinder length="0.42" radius="0.02"/>
+        </geometry>
+    </visual>
+  </link>
+  <link name="ezgripper_rx_ry">
+   <visual>
+       <geometry>
+           <cylinder length="0.42" radius="0.02"/>
+        </geometry>
+    </visual>
+  </link>
+  <link name="ezgripper_ry_rz">
+   <visual>
+       <geometry>
+           <cylinder length="0.42" radius="0.02"/>
+        </geometry>
+    </visual>
+  </link>
+
+  <joint name="ezgripper_base_x" type="prismatic">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
     <parent link="world"/>
+    <child link="ezgripper_xy"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" velocity="10"/>
+  </joint>
+  <joint name="ezgripper_base_y" type="prismatic">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+    <parent link="ezgripper_xy"/>
+    <child link="ezgripper_yz"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="100" velocity="10"/>
+  </joint>
+  <joint name="ezgripper_base_z" type="prismatic">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+    <parent link="ezgripper_yz"/>
+    <child link="ezgripper_z_rx"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="100" velocity="10"/>
+  </joint>
+  <joint name="ezgripper_base_r_x" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+    <parent link="ezgripper_z_rx"/>
+    <child link="ezgripper_rx_ry"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" velocity="3.67"/>
+  </joint>
+  <joint name="ezgripper_base_r_y" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+    <parent link="ezgripper_rx_ry"/>
+    <child link="ezgripper_ry_rz"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="100" velocity="3.67"/>
+  </joint>
+  <joint name="ezgripper_base_r_z" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+    <parent link="ezgripper_ry_rz"/>
     <child link="only_ezgripper_palm_link"/>
-    <axis xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="100" velocity="3.67"/>
   </joint>
 
   <link name="only_ezgripper_palm_link">
@@ -52,6 +124,7 @@
       <mass value=".3"/>
       <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
     </inertial>
+    <gravity>0</gravity>
   </link>
 
   <link name="only_ezgripper_finger_1">
@@ -241,6 +314,72 @@
     <actuator name="only_ezgripper_motor5">
       <mechanicalReduction>1</mechanicalReduction>
       <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_x">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ezgripper_base_x">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor6">
+      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_y">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ezgripper_base_y">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor7">
+      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_z">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ezgripper_base_z">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor8">
+      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_r_x">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ezgripper_base_r_x">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor9">
+      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_r_y">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ezgripper_base_r_y">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor10">
+      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_r_z">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ezgripper_base_r_z">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor11">
+      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
     </actuator>
   </transmission>
 </robot>

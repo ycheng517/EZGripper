@@ -33,7 +33,7 @@
         </geometry>
       </visual>
     </link>
-    <joint name='fixed' type='revolute'>
+    <joint name='robot_base' type='revolute'>
       <child>only_ezgripper_palm_link</child>
       <parent>world</parent>
       <axis>
