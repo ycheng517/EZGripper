@@ -12,12 +12,17 @@
   <node name="spawn_sdf" pkg="gazebo_ros" type="spawn_model"
         args="-param sake_robot_model -urdf -model sake_robot" />  
 
-<!--
   <rosparam file="$(find ezgripper_driver)/config/controllers_dual.yaml" command="load"/>
   <node name="left_controller_spawner" pkg="controller_manager" type="spawner" args="left_controller"/>
   <node name="right_controller_spawner" pkg="controller_manager" type="spawner" args="right_controller"/>
   <node name="left_tip_controller_spawner" pkg="controller_manager" type="spawner" args="left_tip_controller"/>
   <node name="right_tip_controller_spawner" pkg="controller_manager" type="spawner" args="right_tip_controller"/>
   <node name="spring_controller_spawner" pkg="controller_manager" type="spawner" args="spring_calculation_controller"/>
--->
+  <node name="base_x_controller_spawner" pkg="controller_manager" type="spawner" args="base_x_controller"/>
+  <node name="base_y_controller_spawner" pkg="controller_manager" type="spawner" args="base_y_controller"/>
+  <node name="base_z_controller_spawner" pkg="controller_manager" type="spawner" args="base_z_controller"/>
+  <node name="base_r_x_controller_spawner" pkg="controller_manager" type="spawner" args="base_r_x_controller"/>
+  <node name="base_r_y_controller_spawner" pkg="controller_manager" type="spawner" args="base_r_y_controller"/>
+  <node name="base_r_z_controller_spawner" pkg="controller_manager" type="spawner" args="base_r_z_controller"/>
+
 </launch>
