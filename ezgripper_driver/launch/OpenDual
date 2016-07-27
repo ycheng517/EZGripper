@@ -1,2 +1,4 @@
-rostopic pub /arm_controller/command trajectory_msgs/JointTrajectory '{joint_names: ["knuckle_1","knuckle_2"], points: [{positions: [1.6,1.6], time_from_start: [1.0, 0.0]}]}' -1
+rostopic pub /left_controller/command std_msgs/Float64 -1 -- -0 & 
+rostopic pub /right_controller/command std_msgs/Float64 -1 -- -0 & 
+rostopic pub /spring_calculation_controller/command std_msgs/Float64 -1 -- -0 &
 
