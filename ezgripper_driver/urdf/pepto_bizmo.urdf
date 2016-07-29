@@ -1,0 +1,21 @@
+<robot name="palmolive_detergent">
+  <link name="palmolive_detergent">
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="0.25" />
+      <inertia  ixx="0.0006" ixy="0.0"  ixz="0.0"  iyy="0.0006"  iyz="0.0"  izz="0.0001" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ezgripper_driver/meshes/pepto_bizmo.stl" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ezgripper_driver/meshes/pepto_bizmo.stl" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
