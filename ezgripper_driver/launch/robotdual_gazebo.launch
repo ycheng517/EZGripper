@@ -30,6 +30,6 @@
   <node pkg="tf" type="static_transform_publisher" name="kinect_tf_broadcaster" args="0.0 0.0 0.3 0 0 -2.0708 /map /kinect_frame 100" />
 
   <node name="grasp_image_saver" pkg="image_view" type="image_saver" 
-    args="image:=camera/ir/image_raw _save_all_image:=false _filename_format:=left%04d.%s __name:=image_saver"/>
+    args="image:=camera/ir/image_raw _save_all_image:=false _filename_format:=/home/yifei/sake_ws/src/EZGripper/ezgripper_driver/data/grasp%04d.%s"/>
 
 </launch>

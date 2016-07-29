@@ -7,6 +7,7 @@ from std_msgs.msg import Float64
 from gazebo_msgs.srv import *
 from gazebo_msgs.msg import ModelState
 from geometry_msgs.msg import *
+from std_srvs.srv import Empty
 from decimal import Decimal
 
 parser = argparse.ArgumentParser(description='specify arguments for grasp experiment')
@@ -86,28 +87,11 @@ if __name__ == "__main__":
     print s("grasp_object", obj_xml, "", obj_pose_q, "world")
     rospy.sleep(1)
 
-    # get object height (for grasp verification later)
-    res = gms_client("grasp_object","world")
-    prev_obj_height = res.pose.position.z
+    # take picture
+    rospy.wait_for_service("/grasp_image_saver/save")
+    s = rospy.ServiceProxy("/grasp_image_saver/save", Empty)
+    print s()
+    
+    
 
-    # close gripper
-    msg = Float64()
-    msg.data = -0.2
-    gripper_l.publish(msg)
-    rospy.sleep(0.02)
-    gripper_r.publish(msg)
-    rospy.sleep(0.02)
-    gripper_ref.publish(msg)
-    rospy.sleep(3)
-
-    # lift gripper in z direction
-    msg.data = gripper_pose_args[2] + 0.2
-    base_z.publish(msg)
-
-    # check if grasp is successful
-    res = gms_client("grasp_object","world")
-    if res.pose.position.z - prev_obj_height > 0.2:
-        print("grasp success")
-    else: 
-        print("grasp failed")
     
