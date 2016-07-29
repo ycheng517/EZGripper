@@ -22,3 +22,33 @@ spring_calculation_controller:
   type: "effort_controllers/JointEffortController"
   joint: spring_force_calculation_joint
   pid: {p: 10.0, i: 0.01, d: 1.0}
+
+base_x_controller:
+  type: effort_controllers/JointPositionController
+  joint: base_x
+  pid: {p: 100.0, i: 0.1, d: 10.0}
+
+base_y_controller:
+  type: effort_controllers/JointPositionController
+  joint: base_y
+  pid: {p: 100.0, i: 0.1, d: 10.0}
+
+base_z_controller:
+  type: effort_controllers/JointPositionController
+  joint: base_z
+  pid: {p: 100.0, i: 0.1, d: 10.0}
+
+base_rx_controller:
+  type: effort_controllers/JointPositionController
+  joint: base_rx
+  pid: {p: 100.0, i: 0.1, d: 10.0}
+
+base_ry_controller:
+  type: effort_controllers/JointPositionController
+  joint: base_ry
+  pid: {p: 100.0, i: 0.1, d: 10.0}
+
+base_rz_controller:
+  type: effort_controllers/JointPositionController
+  joint: base_rz
+  pid: {p: 100.0, i: 0.1, d: 10.0}

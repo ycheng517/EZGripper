@@ -10,7 +10,7 @@
   </include>
  
   <node name="spawn_sdf" pkg="gazebo_ros" type="spawn_model"
-        args="-param sake_robot_model -sdf -model sake_robot" />  
+    args="-param sake_robot_model -sdf -model sake_robot" />  
 
   <rosparam file="$(find ezgripper_driver)/config/controllers_dual.yaml" command="load"/>
   <node name="left_controller_spawner" pkg="controller_manager" type="spawner" args="left_controller"/>
@@ -18,5 +18,18 @@
   <node name="left_tip_controller_spawner" pkg="controller_manager" type="spawner" args="left_tip_controller"/>
   <node name="right_tip_controller_spawner" pkg="controller_manager" type="spawner" args="right_tip_controller"/>
   <node name="spring_controller_spawner" pkg="controller_manager" type="spawner" args="spring_calculation_controller"/>
+  <node name="base_x_controller_spawner" pkg="controller_manager" type="spawner" args="base_x_controller"/>
+  <node name="base_y_controller_spawner" pkg="controller_manager" type="spawner" args="base_y_controller"/>
+  <node name="base_z_controller_spawner" pkg="controller_manager" type="spawner" args="base_z_controller"/>
+  <node name="base_rx_controller_spawner" pkg="controller_manager" type="spawner" args="base_rx_controller"/>
+  <node name="base_ry_controller_spawner" pkg="controller_manager" type="spawner" args="base_ry_controller"/>
+  <node name="base_rz_controller_spawner" pkg="controller_manager" type="spawner" args="base_rz_controller"/>
+
+  <node name="tip_joints_controller" pkg="ezgripper_driver" type="tip_joints_controller.py" />
+
+  <node pkg="tf" type="static_transform_publisher" name="kinect_tf_broadcaster" args="0.0 0.0 0.3 0 0 -2.0708 /map /kinect_frame 100" />
+
+  <node name="grasp_image_saver" pkg="image_view" type="image_saver" 
+    args="image:=camera/ir/image_raw _save_all_image:=false _filename_format:=left%04d.%s __name:=image_saver"/>
 
 </launch>

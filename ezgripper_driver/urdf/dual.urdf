@@ -19,7 +19,13 @@
         only_ezgripper_knuckle_2,
         only_ezgripper_tip_joint_1,
         only_ezgripper_tip_joint_2,
-        spring_force_calculation_joint
+        spring_force_calculation_joint,
+        base_x,
+        base_y,
+        base_z,
+        base_rx,
+        base_ry,
+        base_rz
       </jointName>
     </plugin>
   </gazebo>
@@ -27,11 +33,99 @@
   <!-- Add the gripper -->
   <!-- links -->
   <link name="world"/>
-  <joint name="fixed" type="fixed">
-    <origin rpy="0 0 0" xyz="0.049 0.0 0.2"/>
+
+  <link name="ezgripper_xy">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia
+        ixx="1.0" ixy="0.0" ixz="0.0"
+        iyy="1.0" iyz="0.0"
+        izz="1.0"/>
+    </inertial>
+  </link>
+  <link name="ezgripper_yz">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia
+        ixx="1.0" ixy="0.0" ixz="0.0"
+        iyy="1.0" iyz="0.0"
+        izz="1.0"/>
+    </inertial>
+  </link>
+  <link name="ezgripper_z_rx">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia
+        ixx="1.0" ixy="0.0" ixz="0.0"
+        iyy="1.0" iyz="0.0"
+        izz="1.0"/>
+    </inertial>
+  </link>
+  <link name="ezgripper_rx_ry">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia
+        ixx="1.0" ixy="0.0" ixz="0.0"
+        iyy="1.0" iyz="0.0"
+        izz="1.0"/>
+    </inertial>
+  </link>
+  <link name="ezgripper_ry_rz">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia
+        ixx="1.0" ixy="0.0" ixz="0.0"
+        iyy="1.0" iyz="0.0"
+        izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="base_x" type="prismatic">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
     <parent link="world"/>
+    <child link="ezgripper_xy"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="-10" upper="10" velocity="2"/>
+  </joint>
+  <joint name="base_y" type="prismatic">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+    <parent link="ezgripper_xy"/>
+    <child link="ezgripper_yz"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="100" lower="-10" upper="10" velocity="2"/>
+  </joint>
+  <joint name="base_z" type="prismatic">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+    <parent link="ezgripper_yz"/>
+    <child link="ezgripper_z_rx"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="100" lower="-10" upper="10" velocity="2"/>
+  </joint>
+  <joint name="base_rx" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+    <parent link="ezgripper_z_rx"/>
+    <child link="ezgripper_rx_ry"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="-3.1415" upper="3.1415" velocity="2"/>
+  </joint>
+  <joint name="base_ry" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0"/>
+    <parent link="ezgripper_rx_ry"/>
+    <child link="ezgripper_ry_rz"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="100" lower="-3.1415" upper="3.1415" velocity="2"/>
+  </joint>
+  <joint name="base_rz" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="ezgripper_ry_rz"/>
     <child link="only_ezgripper_palm_link"/>
-    <axis xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="100" lower="-3.1415" upper="3.1415" velocity="2"/>
   </joint>
 
   <link name="only_ezgripper_palm_link">
@@ -53,6 +147,30 @@
       <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
     </inertial>
   </link>
+
+  <link name="only_ezgripper_kinect_link">
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="0.01" />
+      <inertia  ixx="0.01" ixy="0.0"  ixz="0.0"  iyy="0.01"  iyz="0.0"  izz="0.01" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <box size="0.01 0.02 0.01" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="only_ezgripper_kinect_link" type="fixed">
+    <origin rpy="0 0.5 0" xyz="0 0 0.17"/>
+    <parent link="only_ezgripper_palm_link"/>
+    <child link="only_ezgripper_kinect_link"/>
+  </joint>
+
+  <gazebo reference="only_ezgripper_kinect_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
 
   <link name="only_ezgripper_finger_1">
     <visual>
@@ -100,6 +218,7 @@
     <origin rpy="1.5708 0 3.14159" xyz="0.1056 0.03 0"/>
     <axis xyz="0 1 0"/>
     <limit effort="1" lower="-.27" upper="1.57075" velocity="3.67"/>
+    <dynamics damping="0.1" />
   </joint>
 
   <joint name="only_ezgripper_knuckle_2" type="revolute">
@@ -108,6 +227,7 @@
     <origin rpy="-1.5708 0 3.14159" xyz="0.1056 -0.03 0"/>
     <axis xyz="0 1 0"/>
     <limit effort="1" lower="-.27" upper="1.57075" velocity="3.67"/>
+    <dynamics damping="0.1" />
   </joint>
 
   <link name="only_ezgripper_finger_tip_1">
@@ -153,17 +273,19 @@
   <joint name="only_ezgripper_tip_joint_1" type="revolute">
     <parent link="only_ezgripper_finger_1"/>
     <child link="only_ezgripper_finger_tip_1"/>
-    <origin rpy="0 0.31 0" xyz="-0.0655 0 0"/>
+    <origin rpy="0 0.26 0" xyz="-0.0655 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="1" lower="-1.57" upper="0.31" velocity="3.67"/>
+    <limit effort="1" lower="-1.57" upper="0.26" velocity="3.67"/>
+    <dynamics damping="0.1" />
   </joint>
 
   <joint name="only_ezgripper_tip_joint_2" type="revolute">
     <parent link="only_ezgripper_finger_2"/>
     <child link="only_ezgripper_finger_tip_2"/>
-    <origin rpy="0 0.31 0" xyz="-0.0655 0 0"/>
+    <origin rpy="0 0.26 0" xyz="-0.0655 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="1" lower="-1.57" upper="0.31" velocity="3.67"/>
+    <limit effort="1" lower="-1.57" upper="0.26" velocity="3.67"/>
+    <dynamics damping="0.1" />
   </joint>
 
   <link name="spring_force_calculation_link">
@@ -187,6 +309,7 @@
     <origin rpy="0 0 0" xyz="0 0 0.063"/>
     <axis xyz="0 1 0"/>
     <limit effort="1" lower="-.27" upper="1.57075" velocity="3.67"/>
+    <dynamics damping="0.1" />
   </joint>
 
   <transmission name="only_ezgripper_trans_1">
@@ -196,7 +319,6 @@
     </joint>
     <actuator name="only_ezgripper_motor1">
       <mechanicalReduction>1</mechanicalReduction>
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </actuator>
   </transmission>
 
@@ -207,7 +329,6 @@
     </joint>
     <actuator name="only_ezgripper_motor2">
       <mechanicalReduction>1</mechanicalReduction>
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </actuator>
   </transmission>
 
@@ -218,7 +339,6 @@
     </joint>
     <actuator name="only_ezgripper_motor3">
       <mechanicalReduction>1</mechanicalReduction>
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </actuator>
   </transmission>
 
@@ -229,7 +349,6 @@
     </joint>
     <actuator name="only_ezgripper_motor4">
       <mechanicalReduction>1</mechanicalReduction>
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </actuator>
   </transmission>
 
@@ -240,8 +359,110 @@
     </joint>
     <actuator name="only_ezgripper_motor5">
       <mechanicalReduction>1</mechanicalReduction>
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
     </actuator>
   </transmission>
+
+  <transmission name="only_ezgripper_trans_x">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_x">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor6">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_y">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_y">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor6">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_z">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_z">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor6">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_rx">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_rx">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor6">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_ry">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_ry">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor6">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="only_ezgripper_trans_rz">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_rz">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="only_ezgripper_motor6">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <!-- https://github.com/qboticslabs/mastering_ros_robot_description_pkg/blob/master/urdf/seven_dof_arm.urdf -->
+  <gazebo reference="only_ezgripper_kinect_link">
+    <!-- Depth (IR) -->
+    <sensor name="rgbd_camera_frame_sensor" type="depth">
+      <always_on>true</always_on>
+      <update_rate>6.0</update_rate>
+      <camera>
+        <horizontal_fov>1.01229096616</horizontal_fov>
+        <image>
+          <format>R8G8B8</format>
+          <width>320</width>
+          <height>240</height>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>4.0</far>
+        </clip>
+      </camera>
+      <plugin filename="libgazebo_ros_openni_kinect.so" name="rgbd_camera_frame_controller">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>6.0</updateRate>
+        <cameraName>camera</cameraName>
+        <imageTopicName>ir/image_raw</imageTopicName>
+        <cameraInfoTopicName>ir/camera_info</cameraInfoTopicName>
+        <depthImageTopicName>depth_registered/sw_registered/image_rect_raw</depthImageTopicName>
+        <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+        <pointCloudTopicName>/overhead_kinect1/depth_registered/points</pointCloudTopicName>
+        <frameName>kinect_frame</frameName>
+        <pointCloudCutoff>0.05</pointCloudCutoff>
+        <pointCloudCutoffMax>5</pointCloudCutoffMax>
+        <rangeMax>4.0</rangeMax>
+        <!-- Distortion parameters not supported in gazebo 1.9.* plugins -->
+        <!--distortionK1>0.00000001</distortionK1>
+          <distortionK2>0.00000001</distortionK2>
+          <distortionK3>0.00000001</distortionK3>
+          <distortionT1>0.00000001</distortionT1>
+          <distortionT2>0.00000001</distortionT2-->
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
 </robot>
 
