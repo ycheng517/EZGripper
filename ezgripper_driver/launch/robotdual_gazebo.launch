@@ -1,5 +1,5 @@
 <launch>
-  
+  <group ns="yifei_computer">
 	<param name="robot_description" command="cat $(find ezgripper_driver)/urdf/dual.urdf" /> 
 	<param name="sake_robot_model" command="cat $(find ezgripper_driver)/urdf/dual.sdf" /> 
 
@@ -7,6 +7,7 @@
 
   <!-- Start Gazebo with an empty world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch"> 
+    <arg name="world_name" value="$(find ezgripper_driver)/worlds/empty_speed_up.world"/>
   </include>
  
   <node name="spawn_sdf" pkg="gazebo_ros" type="spawn_model"
@@ -31,5 +32,5 @@
 
   <node name="grasp_image_saver" pkg="image_view" type="image_saver" 
     args="image:=camera/ir/image_raw _save_all_image:=false _filename_format:=/home/yifei/sake_ws/src/EZGripper/ezgripper_driver/data/grasp%04d.%s"/>
-
+  </group>
 </launch>

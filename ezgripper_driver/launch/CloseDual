@@ -1,4 +1,4 @@
-rostopic pub /left_controller/command std_msgs/Float64 -1 -- -0.2 & 
-rostopic pub /right_controller/command std_msgs/Float64 -1 -- -0.2 & 
-rostopic pub /spring_calculation_controller/command std_msgs/Float64 -1 -- -0.2
+rostopic pub /left_controller/command std_msgs/Float64 -1 -- -1.5 & 
+rostopic pub /right_controller/command std_msgs/Float64 -1 -- -1.5 & 
+rostopic pub /spring_calculation_controller/command std_msgs/Float64 -1 -- -1.5
 

@@ -16,8 +16,9 @@ ref_joint = 4
 def callback(data):
     if (abs(data.position[knuckle_1] - data.position[ref_joint]) > 0.05):
         msg = Float64()
-        
         msg.data = -(data.position[knuckle_1] - data.position[ref_joint])
+        if msg.data < -0.5:
+            msg.data = -0.5
         finger_1.publish(msg)
         print("tip joint 1 effort: %f" % msg.data)
     else: 
@@ -29,6 +30,8 @@ def callback(data):
         msg = Float64()
         
         msg.data = -(data.position[knuckle_2] - data.position[ref_joint]) 
+        if msg.data < -0.5:
+            msg.data = -0.5
         finger_2.publish(msg)
         print("tip joint 2 effort: %f" % msg.data)
     else: 

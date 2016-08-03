@@ -13,6 +13,10 @@ parser = argparse.ArgumentParser(description='specify arguments for grasp experi
 parser.add_argument('--gripper_pose', dest='gripper_pose', nargs=6, help='<required> x y z angle_x angle_y angle_z', required=True)
 parser.add_argument('--object_pose', dest='object_pose', nargs=6, help='<required> x y z angle_x angle_y angle_z', required=True)
 parser.add_argument('--object_file_name', dest='object_file_name', help='<required> file name of the object, not including path', required=True)
+parser.add_argument('--sdf', dest='sdf', action='store_true')
+parser.add_argument('--urdf', dest='urdf', action='store_true')
+parser.set_defaults(sdf=False)
+parser.set_defaults(urdf=False)
 
 def gms_client(model_name,relative_entity_name):
     rospy.wait_for_service('/gazebo/get_model_state')
@@ -51,7 +55,6 @@ if __name__ == "__main__":
     rospy.sleep(0.05)
     gripper_ref.publish(msg)
     rospy.sleep(0.05)
-    rospy.sleep(3)
 
     #move gripper in position
     msg = Float64()
@@ -72,19 +75,23 @@ if __name__ == "__main__":
     rospy.sleep(0.02)
     msg.data = gripper_pose_args[5]
     base_rz.publish(msg)
-    rospy.sleep(3)
+    rospy.sleep(2)
 
     # spawn object
-    rospy.wait_for_service("gazebo/spawn_urdf_model")
-    s = rospy.ServiceProxy("gazebo/spawn_urdf_model", SpawnModel)
+    if args.urdf: 
+        rospy.wait_for_service("gazebo/spawn_urdf_model")
+        s = rospy.ServiceProxy("gazebo/spawn_urdf_model", SpawnModel)
+    if args.sdf: 
+        rospy.wait_for_service("gazebo/spawn_sdf_model")
+        s = rospy.ServiceProxy("gazebo/spawn_sdf_model", SpawnModel)
     orient = Quaternion(*tf.transformations.quaternion_from_euler(obj_pose[3], obj_pose[4], obj_pose[5]))
     obj_pose_q = Pose(Point(obj_pose[0], obj_pose[1], obj_pose[2]), orient)
     obj_file = dirname(dirname(abspath(__file__))) + "/urdf/" + args.object_file_name
     with open(obj_file, "r") as f:
         obj_xml = f.read()
 
-    print s("grasp_object", obj_xml, "", obj_pose_q, "world")
-    rospy.sleep(1)
+    print "model spawn " + str(s("grasp_object", obj_xml, "", obj_pose_q, "world"))
+    rospy.sleep(0.02)
 
     # get object height (for grasp verification later)
     res = gms_client("grasp_object","world")
@@ -92,22 +99,22 @@ if __name__ == "__main__":
 
     # close gripper
     msg = Float64()
-    msg.data = -0.2
+    msg.data = -1.5
     gripper_l.publish(msg)
     rospy.sleep(0.02)
     gripper_r.publish(msg)
     rospy.sleep(0.02)
     gripper_ref.publish(msg)
-    rospy.sleep(3)
+    rospy.sleep(2)
 
     # lift gripper in z direction
     msg.data = gripper_pose_args[2] + 0.2
     base_z.publish(msg)
-
+    rospy.sleep(1)
     # check if grasp is successful
     res = gms_client("grasp_object","world")
-    if res.pose.position.z - prev_obj_height > 0.2:
-        print("grasp success")
+    if res.pose.position.z - prev_obj_height > 0.15:
+        print("grasp success, z clearance is: %f" % (res.pose.position.z - prev_obj_height))
     else: 
-        print("grasp failed")
+        print("grasp failed, z clearance is: %f" % (res.pose.position.z - prev_obj_height))
     
