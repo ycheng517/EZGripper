@@ -19,9 +19,9 @@ parser.set_defaults(sdf=False)
 parser.set_defaults(urdf=False)
 
 def gms_client(model_name,relative_entity_name):
-    rospy.wait_for_service('/gazebo/get_model_state')
+    rospy.wait_for_service('/yifei/gazebo/get_model_state')
     try:
-        gms = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
+        gms = rospy.ServiceProxy('/yifei/gazebo/get_model_state', GetModelState)
         resp1 = gms(model_name,relative_entity_name)
         return resp1
     except rospy.ServiceException, e:
@@ -35,15 +35,15 @@ if __name__ == "__main__":
     obj_pose = [float(i) for i in args.object_pose]
     gripper_pose_args = [float(i) for i in args.gripper_pose]
 
-    base_x = rospy.Publisher('/base_x_controller/command', Float64, queue_size=5)
-    base_y = rospy.Publisher('/base_y_controller/command', Float64, queue_size=5)
-    base_z = rospy.Publisher('/base_z_controller/command', Float64, queue_size=5)
-    base_rx = rospy.Publisher('/base_rx_controller/command', Float64, queue_size=5)
-    base_ry = rospy.Publisher('/base_ry_controller/command', Float64, queue_size=5)
-    base_rz = rospy.Publisher('/base_rz_controller/command', Float64, queue_size=5)
-    gripper_l = rospy.Publisher('/left_controller/command', Float64, queue_size=5)
-    gripper_r = rospy.Publisher('/right_controller/command', Float64, queue_size=5)
-    gripper_ref = rospy.Publisher('/spring_calculation_controller/command', Float64, queue_size=5)
+    base_x = rospy.Publisher('/yifei/base_x_controller/command', Float64, queue_size=5)
+    base_y = rospy.Publisher('/yifei/base_y_controller/command', Float64, queue_size=5)
+    base_z = rospy.Publisher('/yifei/base_z_controller/command', Float64, queue_size=5)
+    base_rx = rospy.Publisher('/yifei/base_rx_controller/command', Float64, queue_size=5)
+    base_ry = rospy.Publisher('/yifei/base_ry_controller/command', Float64, queue_size=5)
+    base_rz = rospy.Publisher('/yifei/base_rz_controller/command', Float64, queue_size=5)
+    gripper_l = rospy.Publisher('/yifei/left_controller/command', Float64, queue_size=5)
+    gripper_r = rospy.Publisher('/yifei/right_controller/command', Float64, queue_size=5)
+    gripper_ref = rospy.Publisher('/yifei/spring_calculation_controller/command', Float64, queue_size=5)
 
     rospy.sleep(1)
     # open gripper
@@ -79,11 +79,11 @@ if __name__ == "__main__":
 
     # spawn object
     if args.urdf: 
-        rospy.wait_for_service("gazebo/spawn_urdf_model")
-        s = rospy.ServiceProxy("gazebo/spawn_urdf_model", SpawnModel)
+        rospy.wait_for_service("/yifei/gazebo/spawn_urdf_model")
+        s = rospy.ServiceProxy("/yifei/gazebo/spawn_urdf_model", SpawnModel)
     if args.sdf: 
-        rospy.wait_for_service("gazebo/spawn_sdf_model")
-        s = rospy.ServiceProxy("gazebo/spawn_sdf_model", SpawnModel)
+        rospy.wait_for_service("/yifei/gazebo/spawn_sdf_model")
+        s = rospy.ServiceProxy("/yifei/gazebo/spawn_sdf_model", SpawnModel)
     orient = Quaternion(*tf.transformations.quaternion_from_euler(obj_pose[3], obj_pose[4], obj_pose[5]))
     obj_pose_q = Pose(Point(obj_pose[0], obj_pose[1], obj_pose[2]), orient)
     obj_file = dirname(dirname(abspath(__file__))) + "/urdf/" + args.object_file_name
